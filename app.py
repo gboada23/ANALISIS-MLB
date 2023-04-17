@@ -43,16 +43,11 @@ if option == 'Presentacion':
     st.write(" ")
     st.write(" ")
     col1, col2, col3 = st.columns(3)
-    col1.expander("Presentado por").write("GUSTAVO BOADA")
-    col3.expander("Contacto").write("""
-                                    - [Repositorios en Git-hub](https://github.com/gboada23/Analisis-MLB)
-                                    
-                                    - [Perfil Linkedln](https://www.linkedin.com/in/gboada23/)
-
-                                    """)
+    col1.expander("Presentado por").write("Gustavo Boada")
+    col3.expander("Git-hub").write("[Repositorio](https://github.com/gboada23/Analisis-MLB)")
+    col2.expander("Contacto").write("[Perfil Linkedln](https://www.linkedin.com/in/gboada23/)")
 
 elif option == 'Data de los lanzadores':
-    st.title('Datos Generales')
     DATA = pd.read_excel("stats_new.xlsx", sheet_name="DATA")
     # BORRAMOS LAS COLUMNAS QUE YA NO HACEN FALTA
     DATA = DATA.drop(["H","HR","%BUENA ZONA","%MALA ZONA"], axis = 1)
@@ -86,6 +81,8 @@ elif option == 'Data de los lanzadores':
     st.sidebar.write(" ")
     st.sidebar.write('Para descargar la data filtrada como Excel, presiona el siguiente botón:')
     descargar_excel1()
+
+    st.expander("INFO").write("Esta tabla pertenece a la data limpia y tratada a travez de Google colab con todos los lanzadores con estadisticas no nulas el archivo se llama [Pitcher MLB 2022.ipynb](https://colab.research.google.com/drive/1pk54HRYvUookOAm2m7BCdafkBHxOaYnX?usp=sharing)")
 
 
 elif option == 'Graficas':
