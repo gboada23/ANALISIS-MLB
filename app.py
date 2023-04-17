@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
@@ -8,6 +9,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from PIL import Image
+
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 DATA = pd.read_excel("stats_new.xlsx", sheet_name="DATA")
@@ -17,14 +19,21 @@ DATA1 = DATA[DATA['ERA']<=8]
 logo = Image.open(r'imagenes/logo.jpg')
 st.sidebar.image(logo, width=100)
 st.sidebar.header("Lanzadores MLB 2022")
+st.sidebar.write(" ")
+st.sidebar.write(" ")
 option = st.sidebar.selectbox(
-    'SELECCIONA UNA PAGINA',
-    ('Presentacion','Bibliografia', 'Data de los lanzadores', 'Graficas',"Top lanzadores por K y ERA","Top Mejores lanzadores","Correlacion","Modelo de regresion"))
+    'Selecciona una pagina para navegar por la app',
+    ('Presentacion','Data de los lanzadores', 'Graficas',"Top lanzadores por K y ERA","Top Mejores lanzadores","Correlacion","Modelo de regresion"))
 if option == 'Presentacion':
     st.write(" ")
     st.write(" ")
     stats = Image.open(r'imagenes/STATS.jpg')
-    col1, col2, col3 = st.columns(3)
+    st.sidebar.header('Recursos utilizados')
+    st.sidebar.markdown('''
+- [Pagina MLB](https://www.mlb.com/stats/pitching/avg-allowed-by-the-pitcher/2022?sortState=ascs) de donde se extrajo la data
+- [Cuaderno de trabajo en Google colab](https://colab.research.google.com/drive/1pk54HRYvUookOAm2m7BCdafkBHxOaYnX?usp=sharing) donde se realizo limpieza y tratamiento de la data
+''')
+    col1, col2, col3 = st.columns((1,4,1))
     col2.image(stats, width=300)
     st.write(" ")
     st.write(" ")
@@ -36,27 +45,11 @@ if option == 'Presentacion':
     col1, col2, col3 = st.columns(3)
     col1.expander("Presentado por").write("GUSTAVO BOADA")
     col3.expander("Contacto").write("""
-                                    Correo: gustavoboadalugo@gmail.com
+                                    - [Repositorios en Git-hub](https://github.com/gboada23/Analisis-MLB)
                                     
-                                    Linkedln: https://www.linkedin.com/in/gboada23/
+                                    - [Perfil Linkedln](https://www.linkedin.com/in/gboada23/)
 
                                     """)
-    
-elif option == 'Bibliografia':
-    st.title('Bibliografia')
-    st.write(" ")
-    st.write(" ")
-    st.write(" ")
-    st.write(" ")
-    st.markdown("### Pagina de donde se extrajo la DATA")
-
-    st.expander("WEBSITE").write("https://www.mlb.com/stats/pitching/avg-allowed-by-the-pitcher/2022?sortState=ascs")
-    
-    LIMPIEZA = "https://colab.research.google.com/drive/1pk54HRYvUookOAm2m7BCdafkBHxOaYnX?usp=sharing"
-    st.write(" ")
-    st.write(" ")
-    st.markdown("### Este es el link del cuaderno en colab donde se limpio la data")
-    st.expander("Pircher MLB 2022.ipynb").write(LIMPIEZA)
 
 elif option == 'Data de los lanzadores':
     st.title('Datos Generales')
@@ -296,9 +289,11 @@ elif option == "Correlacion":
     if columnas_corr:
         data_corr = DATA[columnas_corr].corr()
         # Gráfico de heatmap
-        st.write('Heatmap de correlación')
+        st.write('Matriz de correlación interactiva')
+        fig, ax = plt.subplots(figsize=(5,4))
+        ax.set_facecolor('black')
         sns.heatmap(data_corr, annot=True)
-        st.pyplot()
+        st.pyplot(fig)
         st.write("Seleccione la correlacion entre AVG y ERA para graficarla y verificar que sigue una correlacion lineal")
 
     # grafica de dispersion
@@ -357,15 +352,15 @@ else:
     r2_test = round(model.score(X_test.values.reshape(-1, 1), y_test.values.reshape(-1, 1)),1)
 
     # Graficar la recta de regresión y la distribución de las variables
-    sns.set_style('darkgrid')
+    sns.set_style('dark')
     fig, ax = plt.subplots(figsize=(5,4))
     sns.regplot(x=DATA1['AVG'], y=DATA1['ERA'], line_kws={'color': 'red'})
     ax.set_xlabel('AVG')
     ax.set_ylabel('ERA')
     ax.set_title('Regresión lineal simple entre AVG y ERA')
+    ax.set_facecolor('black')
     st.pyplot(fig)
 
-    # Mostrar el coeficiente de determinación (R^2) y la varianza no explicada
     # Coeficientes de la regresión
     st.sidebar.write("Coeficiente de la pendiente:", coef)
     st.sidebar.write("Intercepto:", intercepto)
@@ -383,4 +378,3 @@ else:
 -   No parece haber una relación clara entre el tipo de brazo de un lanzador y su efectividad.
 
 -   Y Por ultimo que el modelo no es lo suficientemente bueno debido a que solo recogera de manera correcta el 56% de las predicciones ya que la varianza no me explica el 43% de las predicciones, lo que quiere decir que quizas hayan otras variables que interfieran para mejorar este modelo yo tomaria en cuenta incluir mas variables significativas para lograr una regresion lineal multiple y coneguir un buen modelo que se adapte correctamente a los datos.""")
-
