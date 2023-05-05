@@ -45,7 +45,10 @@ if option == 'Presentacion':
     col1, col2, col3 = st.columns(3)
     col1.expander("Presentado por").write("Gustavo Boada")
     col3.expander("Git-hub").write("[Repositorio](https://github.com/gboada23/Analisis-MLB)")
-    col2.expander("Contacto").write("[Perfil Linkedln](https://www.linkedin.com/in/gboada23/)")
+    col2.expander("Contacto").write("""
+    [Perfil Linkedln](https://www.linkedin.com/in/gboada23/)
+
+    [CURRICULUM VITAE](https://cv-gustavo-boada.streamlit.app/)""")
 
 elif option == 'Data de los lanzadores':
     DATA = pd.read_excel("stats_new.xlsx", sheet_name="DATA")
