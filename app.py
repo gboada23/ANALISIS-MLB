@@ -48,7 +48,7 @@ if option == 'Presentacion':
     col2.expander("Contacto").write("""
     [Perfil Linkedln](https://www.linkedin.com/in/gboada23/)
 
-    [CURRICULUM VITAE](https://cv-gustavo-boada.streamlit.app/)""")
+    [Portafolio](https://portafolio-gustavo-boada.streamlit.app/)""")
 
 elif option == 'Data de los lanzadores':
     DATA = pd.read_excel("stats_new.xlsx", sheet_name="DATA")
